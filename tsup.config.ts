@@ -7,7 +7,7 @@ export default defineConfig({
   clean: true,
   outDir: 'dist',
   target: 'es2020',
-  minify: false,
-  sourcemap: true,
+  minify: true,
+  sourcemap: false,
   external: ['react', 'vue'],
 });
