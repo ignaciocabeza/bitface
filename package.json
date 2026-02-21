@@ -1,5 +1,5 @@
 {
-  "name": "bitface",
+  "name": "@ignaciocabeza/bitface",
   "version": "1.0.0",
   "description": "Pixel art SVG avatar/face generator with zero dependencies",
   "type": "module",

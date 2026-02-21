@@ -29,13 +29,13 @@ Generate unique 16x16 pixel art faces as clean SVGs — no dependencies, no canv
 ## Install
 
 ```bash
-npm install bitface
+npm install @ignaciocabeza/bitface
 ```
 
 ## Quick start
 
 ```js
-import { generateFace, generateRandomConfig } from 'bitface'
+import { generateFace, generateRandomConfig } from '@ignaciocabeza/bitface'
 
 // Generate a random avatar
 const svg = generateFace()
@@ -54,7 +54,7 @@ That's it. `coolAvatar` is an SVG string you can drop into any `innerHTML`, save
 ### React
 
 ```jsx
-import { Avatar } from 'bitface/react'
+import { Avatar } from '@ignaciocabeza/bitface/react'
 
 function Profile() {
   return (
@@ -81,7 +81,7 @@ function Profile() {
 **Hooks:**
 
 ```jsx
-import { useAvatar, useAnimatedAvatar } from 'bitface/react'
+import { useAvatar, useAnimatedAvatar } from '@ignaciocabeza/bitface/react'
 
 // Static avatar
 const svg = useAvatar(config)
@@ -94,7 +94,7 @@ const svg = useAnimatedAvatar(config, 'blink')
 
 ```vue
 <script setup>
-import { Avatar } from 'bitface/vue'
+import { Avatar } from '@ignaciocabeza/bitface/vue'
 
 const config = {
   faceShape: 'oval',
@@ -117,7 +117,7 @@ const config = {
 **Composables:**
 
 ```js
-import { useAvatar, useAnimatedAvatar } from 'bitface/vue'
+import { useAvatar, useAnimatedAvatar } from '@ignaciocabeza/bitface/vue'
 
 const svg = useAvatar(() => config)
 const animatedSvg = useAnimatedAvatar(() => config, () => 'emote')
@@ -127,7 +127,7 @@ const animatedSvg = useAnimatedAvatar(() => config, () => 'emote')
 
 ```svelte
 <script>
-  import Avatar from 'bitface/svelte'
+  import Avatar from '@ignaciocabeza/bitface/svelte'
 
   const config = {
     faceShape: 'heart',
@@ -148,7 +148,7 @@ const animatedSvg = useAnimatedAvatar(() => config, () => 'emote')
 ### Node.js / server-side
 
 ```js
-import { generateFace } from 'bitface'
+import { generateFace } from '@ignaciocabeza/bitface'
 import { writeFileSync } from 'fs'
 
 const svg = generateFace({

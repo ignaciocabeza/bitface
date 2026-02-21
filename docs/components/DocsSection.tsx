@@ -7,7 +7,7 @@ import { CodeBlock } from './CodeBlock.tsx';
 const FRAMEWORK_EXAMPLES: Record<string, { code: string; language: string }> = {
   React: {
     language: 'tsx',
-    code: `import { Avatar } from 'bitface/react';
+    code: `import { Avatar } from '@ignaciocabeza/bitface/react';
 
 function MyComponent() {
   return (
@@ -46,13 +46,13 @@ function MyComponent() {
 </template>
 
 <script setup>
-import { Avatar } from 'bitface/vue';
+import { Avatar } from '@ignaciocabeza/bitface/vue';
 </script>`,
   },
   Svelte: {
     language: 'svelte',
     code: `<script>
-  import Avatar from 'bitface/svelte';
+  import Avatar from '@ignaciocabeza/bitface/svelte';
 </script>
 
 <Avatar
@@ -71,7 +71,7 @@ import { Avatar } from 'bitface/vue';
   },
   'Node.js': {
     language: 'ts',
-    code: `import { generateFace } from 'bitface';
+    code: `import { generateFace } from '@ignaciocabeza/bitface';
 import { writeFileSync } from 'fs';
 
 const svg = generateFace({
@@ -138,7 +138,7 @@ export function DocsSection() {
     <section className="docs-section">
       <div className="docs-block">
         <h2>Installation</h2>
-        <CodeBlock code="npm install bitface" language="bash" />
+        <CodeBlock code="npm install @ignaciocabeza/bitface" language="bash" />
       </div>
 
       <div className="docs-block">
@@ -162,7 +162,7 @@ export function DocsSection() {
 
       <div className="docs-block">
         <h2>API Reference</h2>
-        <h3>Core <code>bitface</code></h3>
+        <h3>Core <code>@ignaciocabeza/bitface</code></h3>
         <table className="api-table">
           <thead>
             <tr><th>Export</th><th>Description</th></tr>
@@ -177,7 +177,7 @@ export function DocsSection() {
           </tbody>
         </table>
 
-        <h3>React <code>bitface/react</code></h3>
+        <h3>React <code>@ignaciocabeza/bitface/react</code></h3>
         <table className="api-table">
           <thead>
             <tr><th>Export</th><th>Description</th></tr>
@@ -192,7 +192,7 @@ export function DocsSection() {
           </tbody>
         </table>
 
-        <h3>Vue <code>bitface/vue</code></h3>
+        <h3>Vue <code>@ignaciocabeza/bitface/vue</code></h3>
         <table className="api-table">
           <thead>
             <tr><th>Export</th><th>Description</th></tr>
@@ -207,7 +207,7 @@ export function DocsSection() {
           </tbody>
         </table>
 
-        <h3>Svelte <code>bitface/svelte</code></h3>
+        <h3>Svelte <code>@ignaciocabeza/bitface/svelte</code></h3>
         <table className="api-table">
           <thead>
             <tr><th>Export</th><th>Description</th></tr>
