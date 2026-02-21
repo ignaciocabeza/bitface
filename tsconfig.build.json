@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist"
+  },
+  "include": ["src/index.ts", "src/react.tsx", "src/vue.ts", "src/types.ts", "src/renderer/**/*"],
+  "exclude": ["src/ui/**/*", "src/main.ts", "docs/**/*"]
+}

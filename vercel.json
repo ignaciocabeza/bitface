@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build:docs",
+  "outputDirectory": "docs/dist",
+  "installCommand": "npm install"
+}

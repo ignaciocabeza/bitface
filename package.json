@@ -1,0 +1,111 @@
+{
+  "name": "bitface",
+  "version": "1.0.0",
+  "description": "Pixel art SVG avatar/face generator with zero dependencies",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./react": {
+      "import": {
+        "types": "./dist/react.d.ts",
+        "default": "./dist/react.js"
+      },
+      "require": {
+        "types": "./dist/react.d.cts",
+        "default": "./dist/react.cjs"
+      }
+    },
+    "./vue": {
+      "import": {
+        "types": "./dist/vue.d.ts",
+        "default": "./dist/vue.js"
+      },
+      "require": {
+        "types": "./dist/vue.d.cts",
+        "default": "./dist/vue.cjs"
+      }
+    },
+    "./svelte": {
+      "types": "./src/svelte/Avatar.svelte.d.ts",
+      "svelte": "./src/svelte/Avatar.svelte",
+      "default": "./src/svelte/Avatar.svelte"
+    }
+  },
+  "files": [
+    "dist",
+    "src/svelte"
+  ],
+  "sideEffects": false,
+  "keywords": [
+    "svg",
+    "avatar",
+    "pixel-art",
+    "face-generator",
+    "identicon",
+    "react",
+    "vue",
+    "svelte"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ignaciocabeza/bitface.git"
+  },
+  "homepage": "https://github.com/ignaciocabeza/bitface#readme",
+  "bugs": {
+    "url": "https://github.com/ignaciocabeza/bitface/issues"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "react": ">=18",
+    "svelte": ">=3",
+    "vue": ">=3"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "vue": {
+      "optional": true
+    },
+    "svelte": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "vite --config docs/vite.config.ts",
+    "build:docs": "vite build --config docs/vite.config.ts",
+    "preview": "vite preview --config docs/vite.config.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm test && npm run build"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "@vue/test-utils": "^2.4.6",
+    "jsdom": "^28.1.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tsup": "^8.5.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vitest": "^4.0.18",
+    "vue": "^3.5.28"
+  }
+}
