@@ -16,7 +16,16 @@ Edit `CHANGELOG.md`: move items from `[Unreleased]` into a new version heading.
 ## [X.Y.Z] - YYYY-MM-DD
 ```
 
-### 2. Bump the version
+### 2. Verify the build
+
+The `prepublishOnly` script runs tests and builds automatically, but verify manually before bumping:
+
+```bash
+npm test
+npm run build
+```
+
+### 3. Bump the version
 
 ```bash
 npm version patch   # bug fixes (1.0.1 → 1.0.2)
@@ -25,15 +34,6 @@ npm version major   # breaking changes (1.0.1 → 2.0.0)
 ```
 
 This updates `package.json` and `package-lock.json` and creates a git tag.
-
-### 3. Verify the build
-
-The `prepublishOnly` script runs tests and builds automatically, but you can verify manually first:
-
-```bash
-npm test
-npm run build
-```
 
 ### 4. Check the package contents
 

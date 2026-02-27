@@ -13,6 +13,11 @@ const CONFIG: FaceConfig = {
   nose: 'small',
   ears: 'small',
   hair: 'short',
+  beard: 'none',
+  accessories: 'none',
+  skinColor: 'medium',
+  hairColor: 'black',
+  eyeColor: 'brown',
 };
 
 describe('useAvatar', () => {
