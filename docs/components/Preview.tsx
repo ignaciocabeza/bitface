@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { FaceConfig } from '../../src/types.ts';
-import { generateFace } from '../../src/renderer/index.ts';
+import type { AnimationSequence } from '../../src/renderer/animations.ts';
+import { useAnimatedAvatar } from '../../src/react.tsx';
 
-export function Preview({ config }: { config: FaceConfig }) {
+export function Preview({ config, animation, intensity }: { config: FaceConfig; animation?: string | AnimationSequence; intensity?: number }) {
   const [copied, setCopied] = useState<'svg' | 'json' | null>(null);
-  const svg = generateFace(config);
+  const svg = useAnimatedAvatar(config, animation || undefined, intensity);
 
   function handleCopySvg() {
     navigator.clipboard.writeText(svg);
@@ -31,39 +32,42 @@ export function Preview({ config }: { config: FaceConfig }) {
   }
 
   return (
-    <div className="preview-panel">
-      <div className="preview-sizes">
+    <div className="bg-card rounded-xl p-6 flex flex-col gap-5">
+      <div className="flex items-end justify-center gap-5">
         {[
           { label: 'S', size: 64 },
           { label: 'M', size: 128 },
           { label: 'L', size: 256 },
         ].map(({ label, size }) => (
-          <div key={label} className="preview-size-col">
-            <span className="preview-size-label">{label}</span>
+          <div key={label} className="flex flex-col items-center gap-1.5 min-w-0">
+            <span className="text-[0.7rem] uppercase tracking-widest text-muted">{label}</span>
             <div
-              className="preview-svg"
-              style={{ width: size, height: size }}
+              className="preview-svg aspect-square w-full"
+              style={{ maxWidth: size }}
               dangerouslySetInnerHTML={{ __html: svg }}
             />
           </div>
         ))}
       </div>
 
-      <div className="toolbar">
-        <button className="toolbar-btn" onClick={handleDownload}>Download SVG</button>
-        <button className="toolbar-btn" onClick={handleCopySvg}>
+      <div className="flex gap-3 flex-wrap">
+        <button className="flex-1 min-w-30 px-4 py-2.5 bg-accent text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors duration-150 hover:bg-accent-hover active:bg-accent-active" onClick={handleDownload}>Download SVG</button>
+        <button className="flex-1 min-w-30 px-4 py-2.5 bg-accent text-white border-none rounded-lg text-sm font-semibold cursor-pointer transition-colors duration-150 hover:bg-accent-hover active:bg-accent-active" onClick={handleCopySvg}>
           {copied === 'svg' ? 'Copied!' : 'Copy SVG'}
         </button>
       </div>
 
-      <div className="json-viewer">
-        <div className="json-header">
-          <h3>JSON Config</h3>
-          <button className="json-copy-btn" onClick={handleCopyJson}>
+      <div className="bg-code rounded-lg overflow-hidden">
+        <div className="flex justify-between items-center px-3 py-2 border-b border-border">
+          <h3 className="text-xs uppercase tracking-wide text-muted">JSON Config</h3>
+          <button
+            className="bg-transparent border border-border text-muted-light text-[0.7rem] px-2 py-0.5 rounded cursor-pointer transition-colors duration-150 hover:border-accent hover:text-white"
+            onClick={handleCopyJson}
+          >
             {copied === 'json' ? 'Copied!' : 'Copy'}
           </button>
         </div>
-        <pre className="json-code">{JSON.stringify(config, null, 2)}</pre>
+        <pre className="p-3 font-mono text-[0.7rem] leading-normal text-green overflow-x-auto max-h-70 overflow-y-auto">{JSON.stringify(config, null, 2)}</pre>
       </div>
     </div>
   );

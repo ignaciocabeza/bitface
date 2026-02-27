@@ -8,7 +8,7 @@ import {
   type PropType,
 } from 'vue';
 import { generateFace, generateRandomConfig } from './renderer/index.ts';
-import { ANIMATIONS } from './renderer/animations.ts';
+import { ANIMATIONS, applyIntensity, generateSufferingAnimation } from './renderer/animations.ts';
 import type { FaceConfig } from './types.ts';
 import type { AnimationSequence } from './renderer/animations.ts';
 
@@ -16,21 +16,22 @@ export type { FaceConfig } from './types.ts';
 export type { AnimationSequence } from './renderer/animations.ts';
 export { generateRandomConfig } from './renderer/index.ts';
 
-/** Composable: returns a computed SVG string from a reactive config. If no config is provided, a random face is generated once. */
-export function useAvatar(config?: () => FaceConfig | undefined) {
+/** Composable: returns a computed SVG string from a reactive config. Accepts a full or partial config — missing fields are filled randomly once. */
+export function useAvatar(config?: () => Partial<FaceConfig> | undefined) {
   let fallback: FaceConfig | undefined;
   return computed(() => {
     const c = config?.();
-    if (c) return generateFace(c);
-    if (!fallback) fallback = generateRandomConfig();
+    if (!fallback) fallback = generateRandomConfig(c);
+    if (c) return generateFace({ ...fallback, ...c });
     return generateFace(fallback);
   });
 }
 
-/** Composable: returns a ref that cycles through animation frames. */
+/** Composable: returns a ref that cycles through animation frames. Accepts a full or partial config. Intensity (0–100, default 50) controls speed. */
 export function useAnimatedAvatar(
-  config: () => FaceConfig | undefined,
+  config: () => Partial<FaceConfig> | undefined,
   animation: () => string | AnimationSequence | undefined,
+  intensity?: () => number | undefined,
 ) {
   const frameIndex = ref(0);
   let timer: ReturnType<typeof setTimeout> | undefined;
@@ -39,8 +40,15 @@ export function useAnimatedAvatar(
   const sequence = computed(() => {
     const anim = animation();
     if (!anim) return undefined;
-    if (typeof anim === 'string') return ANIMATIONS[anim];
-    return anim;
+    const i = intensity?.();
+    if (anim === 'suffering') {
+      const c = config();
+      const base = fallback ? { ...fallback, ...c } : c;
+      return generateSufferingAnimation(i ?? 50, base?.skinColor);
+    }
+    const seq = typeof anim === 'string' ? ANIMATIONS[anim] : anim;
+    if (!seq) return undefined;
+    return i !== undefined ? applyIntensity(seq, i) : seq;
   });
 
   function scheduleNext() {
@@ -71,7 +79,8 @@ export function useAnimatedAvatar(
 
   return computed(() => {
     const seq = sequence.value;
-    const base = config() ?? (fallback ??= generateRandomConfig());
+    const c = config();
+    const base = { ...(fallback ??= generateRandomConfig(c)), ...c };
     if (!seq) return generateFace(base);
     const frame = seq.frames[frameIndex.value];
     if (!frame) return generateFace(base);
@@ -84,7 +93,7 @@ export const Avatar = defineComponent({
   name: 'Avatar',
   props: {
     config: {
-      type: Object as PropType<FaceConfig>,
+      type: Object as PropType<Partial<FaceConfig>>,
       default: undefined,
     },
     size: {
@@ -95,11 +104,16 @@ export const Avatar = defineComponent({
       type: [String, Object] as PropType<string | AnimationSequence>,
       default: undefined,
     },
+    intensity: {
+      type: Number,
+      default: undefined,
+    },
   },
   setup(props) {
     const svg = useAnimatedAvatar(
       () => props.config,
       () => props.animation,
+      () => props.intensity,
     );
 
     return () =>

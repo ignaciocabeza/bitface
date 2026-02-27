@@ -10,14 +10,17 @@ export function CodeBlock({ code, language }: { code: string; language?: string 
   }
 
   return (
-    <div className="code-block">
-      <div className="code-header">
-        {language && <span className="code-lang">{language}</span>}
-        <button className="code-copy-btn" onClick={handleCopy}>
+    <div className="bg-code rounded-lg overflow-hidden border border-border">
+      <div className="flex justify-between items-center px-3 py-2 border-b border-border">
+        {language && <span className="text-[0.7rem] uppercase tracking-wide text-muted">{language}</span>}
+        <button
+          className="bg-transparent border border-border text-muted-light text-[0.7rem] px-2 py-0.5 rounded cursor-pointer transition-colors duration-150 hover:border-accent hover:text-white"
+          onClick={handleCopy}
+        >
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
-      <pre className="code-pre"><code>{code}</code></pre>
+      <pre className="p-3 font-mono text-[0.8rem] leading-relaxed text-green overflow-x-auto whitespace-pre"><code>{code}</code></pre>
     </div>
   );
 }

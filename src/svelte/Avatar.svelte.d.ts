@@ -6,9 +6,10 @@ export type { FaceConfig } from '../types.ts';
 export type { AnimationSequence } from '../renderer/animations.ts';
 
 interface AvatarProps {
-  config?: FaceConfig;
+  config?: Partial<FaceConfig>;
   size?: number;
   animation?: string | AnimationSequence;
+  intensity?: number;
   class?: string;
 }
 

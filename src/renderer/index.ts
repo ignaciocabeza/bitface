@@ -8,8 +8,8 @@ function pickRandom<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-/** Generate a random FaceConfig by picking random parts and colors. */
-export function generateRandomConfig(): FaceConfig {
+/** Generate a random FaceConfig. Pass a partial config to pin specific fields while randomizing the rest. */
+export function generateRandomConfig(overrides?: Partial<FaceConfig>): FaceConfig {
   return {
     faceShape: pickRandom(getVariantNames('faceShape')),
     eyes: pickRandom(getVariantNames('eyes')),
@@ -23,6 +23,7 @@ export function generateRandomConfig(): FaceConfig {
     skinColor: pickRandom(Object.keys(SKIN_PRESETS)),
     hairColor: pickRandom(Object.keys(HAIR_PRESETS)),
     eyeColor: pickRandom(Object.keys(EYE_PRESETS)),
+    ...overrides,
   };
 }
 

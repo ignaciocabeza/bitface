@@ -23,7 +23,7 @@ describe('Svelte Avatar component (structural)', () => {
     });
 
     it('imports ANIMATIONS from the renderer', () => {
-      expect(source).toContain("import { ANIMATIONS }");
+      expect(source).toContain("ANIMATIONS");
     });
 
     it('exports config prop', () => {

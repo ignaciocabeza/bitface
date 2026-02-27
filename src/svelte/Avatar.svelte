@@ -1,27 +1,35 @@
 <script>
   import { generateFace, generateRandomConfig } from '../renderer/index.ts';
-  import { ANIMATIONS } from '../renderer/animations.ts';
+  import { ANIMATIONS, applyIntensity, generateSufferingAnimation } from '../renderer/animations.ts';
 
-  /** @type {import('../../src/types.ts').FaceConfig | undefined} */
+  /** @type {Partial<import('../../src/types.ts').FaceConfig> | undefined} */
   export let config = undefined;
   /** @type {number} */
   export let size = 128;
   /** @type {string | import('../renderer/animations.ts').AnimationSequence | undefined} */
   export let animation = undefined;
+  /** @type {number | undefined} */
+  export let intensity = undefined;
 
-  const fallbackConfig = config ? undefined : generateRandomConfig();
+  const fallbackConfig = generateRandomConfig(config);
 
   let frameIndex = 0;
   let timer;
 
-  $: resolvedConfig = config ?? fallbackConfig;
+  $: resolvedConfig = config ? { ...fallbackConfig, ...config } : fallbackConfig;
 
-  $: sequence =
+  $: rawSequence =
     !animation
       ? undefined
-      : typeof animation === 'string'
-        ? ANIMATIONS[animation]
-        : animation;
+      : animation === 'suffering'
+        ? generateSufferingAnimation(intensity ?? 50, resolvedConfig.skinColor)
+        : typeof animation === 'string'
+          ? ANIMATIONS[animation]
+          : animation;
+
+  $: sequence = rawSequence && animation !== 'suffering' && intensity !== undefined
+    ? applyIntensity(rawSequence, intensity)
+    : rawSequence;
 
   $: mergedConfig =
     sequence && sequence.frames[frameIndex]

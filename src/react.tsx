@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect, useRef } from 'react';
 import { generateFace, generateRandomConfig } from './renderer/index.ts';
-import { ANIMATIONS } from './renderer/animations.ts';
+import { ANIMATIONS, applyIntensity, generateSufferingAnimation } from './renderer/animations.ts';
 import type { FaceConfig } from './types.ts';
 import type { AnimationSequence } from './renderer/animations.ts';
 
@@ -8,13 +8,13 @@ export type { FaceConfig } from './types.ts';
 export type { AnimationSequence } from './renderer/animations.ts';
 export { generateRandomConfig } from './renderer/index.ts';
 
-/** Hook: returns SVG string, memoized on config changes. If no config is provided, a random face is generated once. */
-export function useAvatar(config?: FaceConfig): string {
+/** Hook: returns SVG string, memoized on config changes. Accepts a full or partial config — missing fields are filled randomly once. */
+export function useAvatar(config?: Partial<FaceConfig>): string {
   const stableConfig = useRef<FaceConfig | undefined>(undefined);
-  if (!config && !stableConfig.current) {
-    stableConfig.current = generateRandomConfig();
+  if (!stableConfig.current) {
+    stableConfig.current = generateRandomConfig(config);
   }
-  const resolved = config ?? stableConfig.current!;
+  const resolved = config ? { ...stableConfig.current, ...config } : stableConfig.current;
 
   return useMemo(() => generateFace(resolved), [
     resolved.faceShape,
@@ -33,22 +33,25 @@ export function useAvatar(config?: FaceConfig): string {
   ]);
 }
 
-/** Hook: cycles through animation frames, returns the current SVG string. */
+/** Hook: cycles through animation frames, returns the current SVG string. Accepts a full or partial config. Intensity (0–100, default 50) controls animation speed. */
 export function useAnimatedAvatar(
-  config: FaceConfig | undefined,
+  config: Partial<FaceConfig> | undefined,
   animation: string | AnimationSequence | undefined,
+  intensity?: number,
 ): string {
   const stableConfig = useRef<FaceConfig | undefined>(undefined);
-  if (!config && !stableConfig.current) {
-    stableConfig.current = generateRandomConfig();
+  if (!stableConfig.current) {
+    stableConfig.current = generateRandomConfig(config);
   }
-  const resolved = config ?? stableConfig.current!;
+  const resolved = config ? { ...stableConfig.current, ...config } : stableConfig.current;
 
   const sequence = useMemo(() => {
     if (!animation) return undefined;
-    if (typeof animation === 'string') return ANIMATIONS[animation];
-    return animation;
-  }, [animation]);
+    if (animation === 'suffering') return generateSufferingAnimation(intensity ?? 50, resolved.skinColor);
+    const seq = typeof animation === 'string' ? ANIMATIONS[animation] : animation;
+    if (!seq) return undefined;
+    return intensity !== undefined ? applyIntensity(seq, intensity) : seq;
+  }, [animation, intensity, resolved.skinColor]);
 
   const [frameIndex, setFrameIndex] = useState(0);
 
@@ -80,19 +83,21 @@ export function useAnimatedAvatar(
   return useAvatar(mergedConfig);
 }
 
-/** Component: renders the avatar SVG inline, with optional animation. If no config is provided, a random face is generated. */
+/** Component: renders the avatar SVG inline, with optional animation. Accepts a full or partial config — missing fields are filled randomly once. */
 export function Avatar({
   config,
   size = 128,
   className,
   animation,
+  intensity,
 }: {
-  config?: FaceConfig;
+  config?: Partial<FaceConfig>;
   size?: number;
   className?: string;
   animation?: string | AnimationSequence;
+  intensity?: number;
 }) {
-  const svg = useAnimatedAvatar(config, animation);
+  const svg = useAnimatedAvatar(config, animation, intensity);
   return (
     <div
       className={className}
