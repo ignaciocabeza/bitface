@@ -43,19 +43,27 @@ npm pack --dry-run
 
 Confirm only `dist/` and `src/svelte/` are included (per the `files` field in `package.json`).
 
-### 5. Publish to npm
+### 5. Log in to npm (if needed)
+
+```bash
+npm login
+```
+
+This opens a browser to authenticate. You only need to do this once per machine, or when your token expires.
+
+### 6. Publish to npm
 
 ```bash
 npm publish --access public
 ```
 
-### 6. Push the release
+### 7. Push the release
 
 ```bash
 git push origin main --tags
 ```
 
-### 7. Create a GitHub release (optional)
+### 8. Create a GitHub release (optional)
 
 ```bash
 gh release create vX.Y.Z --title "vX.Y.Z" --notes "See [CHANGELOG.md](CHANGELOG.md) for details."
