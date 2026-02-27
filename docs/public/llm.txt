@@ -1,0 +1,115 @@
+# bitface
+
+> Zero-dependency pixel art SVG avatar generator. Deterministic 16×16 faces as optimized SVG strings.
+
+Package: @ignaciocabeza/bitface
+Repository: https://github.com/ignaciocabeza/bitface
+License: MIT
+
+## Install
+
+npm install @ignaciocabeza/bitface
+
+## Quick start
+
+import { generateFace, generateRandomConfig } from '@ignaciocabeza/bitface';
+
+// Random face
+const svg = generateFace();
+
+// Deterministic face
+const config = generateRandomConfig({ hair: 'mohawk', skinColor: 'dark' });
+const svg = generateFace(config);
+
+// Insert into DOM
+element.innerHTML = svg;
+
+## Core API
+
+### generateFace(config?: FaceConfig): string
+Returns an SVG string. Without a config, generates a random face. Same config always produces identical output.
+
+### generateRandomConfig(overrides?: Partial<FaceConfig>): FaceConfig
+Returns a complete random config. Pass partial overrides to pin specific fields.
+
+### getAvailableParts(): Record<string, string[]>
+Returns all part categories and their variant names.
+
+### getPartThumbnail(category, name, skinColor?, hairColor?, eyeColor?): string
+Returns an SVG showing a single part variant in isolation.
+
+## FaceConfig
+
+interface FaceConfig {
+  faceShape: string;     // round, oval, square, heart, long, diamond, wide
+  eyes: string;          // big, small, narrow, round, wink, happy, angry, dots, sleepy, cross, heart
+  eyebrows: string;      // thick, thin, arched, angry, worried, unibrow, none
+  mouth: string;         // smile, frown, open, flat, teeth, smirk, grin, tongue, oh
+  nose: string;          // small, pointy, wide, button, long, snub
+  ears: string;          // small, big, pointed, elf, none
+  hair: string;          // short, long, curly, mohawk, bald, ponytail, spiky, bob, afro, bangs
+  beard?: string;        // stubble, goatee, full, mustache, handlebar, none
+  accessories?: string;  // glasses, sunglasses, hat, headband, earrings, none
+  skinColor?: string;    // Preset name or hex. Presets: light, medium, tan, brown, dark, pale
+  hairColor?: string;    // Preset name or hex. Presets: black, brown, blonde, red, gray, white, auburn, strawberry, platinum, pink, blue, purple, teal
+  eyeColor?: string;     // Preset name or hex. Presets: brown, blue, green, gray
+  backgroundColor?: string; // Hex color for the background. Default: transparent
+}
+
+## Animations
+
+import { ANIMATIONS, getAnimationNames, applyIntensity } from '@ignaciocabeza/bitface';
+
+Built-in animations: idle, talk, blink, sleepy, emote, suffering.
+
+Each animation is an AnimationSequence: { name: string; frames: AnimationFrame[] }
+Each frame: { duration: number; overrides: Partial<FaceConfig> }
+
+To animate, cycle through frames using setTimeout and merge each frame's overrides into a base config, then call generateFace() with the merged config.
+
+applyIntensity(sequence, intensity) scales frame durations. intensity 0–100: 50 = normal, 100 = 5× faster, 0 = 5× slower.
+
+generateSufferingAnimation(percentage, skinColor?) creates a dynamic animation that scales from mild discomfort (0) to maximum suffering (100), including skin flushing.
+
+## React (requires react >= 18)
+
+import { useAvatar, useAnimatedAvatar, Avatar } from '@ignaciocabeza/bitface/react';
+
+// Hook: static avatar
+const svg = useAvatar({ hair: 'mohawk' }); // Partial config OK, missing fields randomized once
+
+// Hook: animated avatar
+const svg = useAnimatedAvatar({ hair: 'mohawk' }, 'blink', 50);
+
+// Component
+<Avatar config={{ hair: 'mohawk' }} size={128} animation="blink" intensity={50} className="my-avatar" />
+
+Props: config? (Partial<FaceConfig>), size? (number, default 128), animation? (string | AnimationSequence), intensity? (number, 0–100), className? (string).
+
+## Vue (requires vue >= 3)
+
+import { useAvatar, useAnimatedAvatar, Avatar } from '@ignaciocabeza/bitface/vue';
+
+// Composable (pass reactive getters)
+const svg = useAvatar(() => config.value);
+const svg = useAnimatedAvatar(() => config.value, () => 'blink', () => 50);
+
+// Component
+<Avatar :config="{ hair: 'mohawk' }" :size="128" animation="blink" :intensity="50" />
+
+## Svelte (requires svelte >= 3)
+
+<script>
+import Avatar from '@ignaciocabeza/bitface/svelte';
+</script>
+
+<Avatar config={{ hair: 'mohawk' }} size={128} animation="blink" intensity={50} />
+
+## Key behaviors
+
+- Zero runtime dependencies
+- Output is deterministic: same FaceConfig = same SVG, always
+- SVGs use shape-rendering="crispEdges" and viewBox="0 0 16 16" for pixel-perfect rendering
+- Hex color values are validated to prevent XSS injection
+- Color fields accept preset names (e.g. "medium") or raw hex codes (e.g. "#E8B88A")
+- Framework integrations accept Partial<FaceConfig>; missing fields are filled randomly once and remain stable across re-renders
