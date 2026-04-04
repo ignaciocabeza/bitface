@@ -3,11 +3,12 @@ import { defineConfig } from 'tsup';
 export default defineConfig({
   entry: ['src/index.ts', 'src/react.tsx', 'src/vue.ts'],
   format: ['esm', 'cjs'],
-  dts: { tsConfigPath: './tsconfig.build.json' },
+  dts: true,
+  tsconfig: './tsconfig.build.json',
   clean: true,
   outDir: 'dist',
   target: 'es2020',
-  minify: true,
+  minify: false,
   sourcemap: false,
   external: ['react', 'vue'],
 });
