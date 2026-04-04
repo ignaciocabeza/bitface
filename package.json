@@ -93,21 +93,21 @@
     "prepublishOnly": "npm test && npm run build"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.2.1",
-    "@testing-library/dom": "^10.4.1",
-    "@testing-library/react": "^16.3.2",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.4",
-    "@vue/test-utils": "^2.4.6",
-    "jsdom": "^28.1.0",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
-    "tailwindcss": "^4.2.1",
-    "tsup": "^8.5.1",
-    "typescript": "~5.9.3",
-    "vite": "^7.3.1",
-    "vitest": "^4.0.18",
-    "vue": "^3.5.28"
+    "@tailwindcss/vite": "4.2.2",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.2",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.1",
+    "@vue/test-utils": "2.4.6",
+    "jsdom": "29.0.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "tailwindcss": "4.2.2",
+    "tsup": "8.5.1",
+    "typescript": "6.0.2",
+    "vite": "8.0.3",
+    "vitest": "4.1.2",
+    "vue": "3.5.32"
   }
 }
