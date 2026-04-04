@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.1] - 2026-04-04
+
+### Fixed
+
+- Resolved 6 dependency vulnerabilities (brace-expansion, editorconfig, minimatch, picomatch, rollup, undici).
+
+### Changed
+
+- Updated all devDependencies to latest versions, including major bumps: `@vitejs/plugin-react` 6, `jsdom` 29, `typescript` 6, `vite` 8.
+- Pinned all devDependency versions (removed `^`/`~` ranges).
+- Added `"ignoreDeprecations": "6.0"` to `tsconfig.build.json` for TypeScript 6 compatibility.
+
 ## [1.1.0] - 2025-05-28
 
 ### Added
